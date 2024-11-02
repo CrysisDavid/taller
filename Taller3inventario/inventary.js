@@ -1,4 +1,13 @@
 const prompt = require('prompt-sync')()
+
+/**
+ * si va a ejecutar el archivo debe tener instalado prompt-sync de lo contrario no se podrá ejecutar
+ * 
+ * @intructions
+ * npm init -en caso de no tener iniciado node-
+ * npm install prompt-sync
+ */
+
 let tineda = {
     products: [ // products es un atributo del objecto tienda, y este a la vez es un arreglo de objectos que contiene la info de los productos
         {
@@ -63,36 +72,46 @@ let tineda = {
     },
 
 
-    updateQuantity: (id, cantidad) => { // con este método se actualiza la cantida de un producto seleccionado, sus parametros son el id y la cantidad a asignar
+    updateQuantity: () => { // con este método se actualiza la cantida de un producto seleccionado, sus parametros son el id y la cantidad a asignar
+        let retry = "si"
 
-        let filteredProduct = tineda.products.filter((product) => product.id == id) // filtro el producto que coincida con el indicado por el user y lo asigno a filteredProduct
+        do {
+            let idToUpdate = prompt("ingresar el id del producto a actualizar: ") //id del producto a actualizar
 
-        if (filteredProduct.length > 0) { // si el producto existe en el inventario
 
-            let updatedProduct = filteredProduct[0] // se crea el objecto con el valor de filteredProducts
+            let filteredProduct = tineda.products.filter((product) => product.id == idToUpdate) // filtro el producto que coincida con el indicado por el user y lo asigno a filteredProduct
 
-            updatedProduct.cantidad = cantidad // y se accede a su atributo cantidad para actualizarlo con la cantidad indicada por el user, ahora el objecto estará actualizado con la cantidad
+            if (filteredProduct.length > 0) { // si el producto existe en el inventario
 
-            tineda.products = tineda.products.filter((tienda) => tienda.id != id) // se filtra y a su se reasigna el arreglo products con todos los valores que no coincidan con el id indicado, para asi poder elimiar el valor antiguo
+                let cantidadToUpdate = prompt("ingresar la cantidad a actualizar: ") // cantidad a actualizar
 
-            tineda.products.push(updatedProduct)// finalmente se agregan el objecto actualizado a ese arreglo
+                let updatedProduct = filteredProduct[0] // se crea el objecto con el valor de filteredProducts
 
-            console.log(`cantidad actualizada\n${JSON.stringify(updatedProduct, null, 4)}`)// finalmente  se muestra el objecto actualizado
+                updatedProduct.cantidad = cantidadToUpdate // y se accede a su atributo cantidad para actualizarlo con la cantidad indicada por el user, ahora el objecto estará actualizado con la cantidad
 
-        } else console.log("el producto no existe")
+                tineda.products = tineda.products.filter((tienda) => tienda.id != idToUpdate) // se filtra y a su se reasigna el arreglo products con todos los valores que no coincidan con el id indicado, para asi poder elimiar el valor antiguo
+
+                tineda.products.push(updatedProduct)// finalmente se agregan el objecto actualizado a ese arreglo
+
+                console.log(`cantidad actualizada\n${JSON.stringify(updatedProduct, null, 4)}`)// finalmente  se muestra el objecto actualizado
+
+            } else console.log("el producto no existe")
+
+            retry = prompt("¿actualizar otro producto? si/no: ")
+        }
+        while (retry.toLowerCase() == "si")
     }
 }
 
 // 
 
 
-tineda.agregar()
+tineda.agregar()// llamada al metodo agregar()
 
 
-let idToUpdate = prompt("ingresar el id del producto a actualizar: ") //id del producto a actualizar
-let cantidadToUpdate = prompt("ingresar la cantidad a actualizar: ") // cantidad a actualizar
 
-tineda.updateQuantity(idToUpdate, cantidadToUpdate)// llamada al metodo updateQuantity()
 
-console.log(tineda.products)
+tineda.updateQuantity()// llamada al metodo updateQuantity()
+
+console.log(`\ninventario actual\n`, tineda.products)
 
