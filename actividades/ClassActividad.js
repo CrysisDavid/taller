@@ -31,7 +31,7 @@ class Empleado {
         this.cargo = cargo;
     }
     aumento(aumento) {
-        this.salario += aumento
+        this.salario += this.salario * aumento
         return (console.log(`recibí un aumento de ${aumento} ahora mi salario ${this.salario}$`))
     }
     introduce() {
@@ -47,7 +47,7 @@ class Empleado {
 
 let Empleado1 = new Empleado("Andrés", 900000, "Practicante")
 Empleado1.introduce()
-Empleado1.aumento(50000)
+Empleado1.aumento(0.5)
 console.log()
 let Triangulo = new Rectangulo(5, 10)
 Triangulo.perimetro()
